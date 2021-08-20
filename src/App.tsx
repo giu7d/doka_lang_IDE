@@ -1,8 +1,6 @@
 import './styles/global.css'
 import React from 'react'
 
-function App() {
+export const App = () => {
   return <div>Hello World</div>
 }
-
-export default App
