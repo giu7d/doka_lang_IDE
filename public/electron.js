@@ -2,6 +2,8 @@ const path = require('path')
 const isDev = require('electron-is-dev')
 const { app, BrowserWindow } = require('electron')
 
+const isProd = !isDev
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1080,
@@ -11,14 +13,13 @@ function createWindow() {
     }
   })
 
-  win.removeMenu()
-  win.loadURL(
-    isDev
-      ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
-  )
+  if (isProd) {
+    win.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
+    win.removeMenu()
+  }
 
   if (isDev) {
+    win.loadURL('http://localhost:3000')
     win.webContents.openDevTools({ mode: 'detach' })
   }
 }
