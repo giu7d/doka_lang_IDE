@@ -1,6 +1,16 @@
 import './styles/global.css'
 import React from 'react'
+import { Tree } from './components/containers/Tree'
+import { Code } from './components/containers/Code'
+import { Console } from './components/containers/Console'
+import { Template } from './components/Template'
 
 export const App = () => {
-  return <div>Hello World</div>
+  return (
+    <Template>
+      <Tree />
+      <Code />
+      <Console />
+    </Template>
+  )
 }
