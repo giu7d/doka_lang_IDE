@@ -9,9 +9,13 @@ function createWindow() {
     width: 1080,
     height: 720,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
     }
   })
+
+  getFilePath()
 
   if (isProd) {
     win.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
@@ -21,6 +25,20 @@ function createWindow() {
   if (isDev) {
     win.loadURL('http://localhost:3000')
     win.webContents.openDevTools({ mode: 'detach' })
+  }
+}
+
+function getFilePath() {
+  try {
+    const path = process.argv[2]
+
+    if (!path) throw new Error('A file argument must be informed!')
+
+    console.log(path)
+
+    global.path = path
+  } catch (error) {
+    console.warn(error)
   }
 }
 

@@ -1,18 +1,59 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FiFile, FiPlay, FiSettings } from 'react-icons/fi'
 
 import { Editor } from '../fragments/Editor'
-import { fizzBuzzCode } from '../../utils/editor'
+import { getArgPath, readFile, saveFile } from '../../services'
+import { isModifyTextKeyboardEvent } from '../../utils/editor'
 
 export const Code = () => {
-  const [code, setCode] = useState(fizzBuzzCode)
+  const [isSaved, setIsSaved] = useState(true)
+  const [code, setCode] = useState('')
+
+  useEffect(() => {
+    handleLoadFile()
+  }, [])
+
+  const handleKeyboardEvent = (event: React.KeyboardEvent) => {
+    if (isModifyTextKeyboardEvent(event)) setIsSaved(false)
+
+    if (event.ctrlKey && event.key === 's') handleSaveFile()
+  }
+
+  const handleLoadFile = async () => {
+    try {
+      const path = getArgPath()
+      const fileAsBuffer = await readFile(path)
+      const fileAsString = fileAsBuffer.toString('utf-8')
+      setCode(fileAsString)
+      console.log(path, 'successfully loaded!')
+    } catch (error) {
+      console.warn(error)
+    }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  const handleSaveFile = async () => {
+    try {
+      const path = getArgPath()
+      await saveFile(path, code)
+      setIsSaved(true)
+      console.log(path, 'successfully saved!')
+    } catch (error) {
+      console.warn(error)
+    }
+  }
 
   return (
-    <div className="flex flex-col h-full w-full bg-gray-50">
+    <div
+      className="flex flex-col h-full w-full bg-gray-50"
+      onKeyDown={handleKeyboardEvent}
+    >
       <div className="header">
         <div className="title">
           <FiFile />
-          <h2 className="font-normal italic">file_name.dk</h2>
+          <h2 className={`font-normal ${!isSaved && 'italic'}`}>
+            file_name.dk
+          </h2>
         </div>
         <div className="actions">
           <button className="icon-btn">
