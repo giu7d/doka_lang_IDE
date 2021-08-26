@@ -4,9 +4,13 @@ import { OutputLine } from '../../utils/console'
 
 interface IConsoleProps {
   output?: OutputLine[]
+  onClear?: () => void
 }
 
-export const Console: React.VFC<IConsoleProps> = ({ output = [] }) => {
+export const Console: React.VFC<IConsoleProps> = ({
+  output = [],
+  onClear = () => {}
+}) => {
   return (
     <div className="console">
       <div className="header text-white">
@@ -15,7 +19,7 @@ export const Console: React.VFC<IConsoleProps> = ({ output = [] }) => {
           <h2>Output</h2>
         </div>
         <div className="actions">
-          <button className="icon-btn">
+          <button className="icon-btn" onClick={onClear}>
             <FiTrash />
           </button>
         </div>

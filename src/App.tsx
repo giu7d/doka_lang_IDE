@@ -5,7 +5,7 @@ import { Tree } from './components/containers/Tree'
 import { Code } from './components/containers/Code'
 import { Console } from './components/containers/Console'
 import { Template } from './components/Template'
-import { compile } from './services'
+import { compile, getArgPath } from './services'
 import { parseStringToTree } from './utils/tree'
 import { CompileError, OutputLine } from './utils/console'
 
@@ -14,15 +14,15 @@ export const App = () => {
   const [errors, setErrors] = useState<CompileError[]>([])
   const [tree, setTree] = useState({})
 
-  // eslint-disable-next-line no-unused-vars
-  const clear = () => {
+  const handleClear = () => {
     setOutput([])
     setErrors([])
-    setTree([])
+    setTree({})
   }
 
-  const run = async (_code: string, path: string) => {
+  const handleRun = async () => {
     try {
+      const path = getArgPath()
       const response = await compile(path)
 
       setErrors(response.errors)
@@ -36,8 +36,8 @@ export const App = () => {
   return (
     <Template>
       <Tree data={tree} />
-      <Code errors={errors} onSave={run} />
-      <Console output={output} />
+      <Code errors={errors} onSave={handleRun} />
+      <Console output={output} onClear={handleClear} />
     </Template>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FiFile, FiPlay, FiSettings } from 'react-icons/fi'
+import { FiFile, FiPlay } from 'react-icons/fi'
 
 import { Editor } from '../fragments/Editor'
 import { getArgPath, readFile, saveFile } from '../../services'
@@ -8,9 +8,9 @@ import { CompileError } from '../../utils/console'
 
 interface ICodeProps {
   errors?: CompileError[]
-  onChange?: (code: string) => void
-  onSave?: (code: string, path: string) => void
-  onLoad?: (code: string, path: string) => void
+  onChange?: () => void
+  onSave?: () => void
+  onLoad?: () => void
 }
 
 export const Code: React.VFC<ICodeProps> = ({
@@ -27,7 +27,7 @@ export const Code: React.VFC<ICodeProps> = ({
   }, [])
 
   useEffect(() => {
-    onChange(code)
+    onChange()
   }, [code])
 
   const handleKeyboardEvent = (event: React.KeyboardEvent) => {
@@ -42,7 +42,7 @@ export const Code: React.VFC<ICodeProps> = ({
       const fileAsBuffer = await readFile(path)
       const fileAsString = fileAsBuffer.toString('utf-8')
       setCode(fileAsString)
-      onLoad(code, path)
+      onLoad()
       console.log(path, 'successfully loaded!')
     } catch (error) {
       console.warn(error)
@@ -55,7 +55,7 @@ export const Code: React.VFC<ICodeProps> = ({
       const path = getArgPath()
       await saveFile(path, code)
       setIsSaved(true)
-      onSave(code, path)
+      onSave()
     } catch (error) {
       console.warn(error)
     }
@@ -75,11 +75,11 @@ export const Code: React.VFC<ICodeProps> = ({
         </div>
         <div className="actions">
           <button className="icon-btn">
-            <FiPlay />
+            <FiPlay onClick={onSave} />
           </button>
-          <button className="icon-btn">
+          {/* <button className="icon-btn">
             <FiSettings />
-          </button>
+          </button> */}
         </div>
       </div>
       <Editor value={code} errors={errors} onChange={setCode} />
