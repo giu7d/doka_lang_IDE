@@ -27,8 +27,6 @@ export const getErrors = (lines: OutputLine[]): CompileError[] =>
         .replace(/(.*)-/g, '')
         .replace(/[^\d,]/g, '')
 
-      console.log(positionAsString)
-
       const position = positionAsString.split(',')
 
       const row = Number.parseInt(position[0])

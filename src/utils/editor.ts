@@ -13,8 +13,6 @@ const withErrorHighlight =
     const line = index + 1
     const isError = !!errors.filter(error => error === line).length
 
-    console.log(line, isError, errors)
-
     return `<span class="${!isError ? '' : 'error-line'}">${children}</span>`
   }
 export const highlightWithLineNumbers = (

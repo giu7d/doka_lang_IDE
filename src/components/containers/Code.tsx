@@ -70,7 +70,7 @@ export const Code: React.VFC<ICodeProps> = ({
         <div className="title">
           <FiFile />
           <h2 className={`font-normal ${!isSaved && 'italic'}`}>
-            file_name.dk
+            examples/example.dk
           </h2>
         </div>
         <div className="actions">
