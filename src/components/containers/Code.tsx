@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { FiFile, FiPlay } from 'react-icons/fi'
+import { FiFile, FiPlay, FiSave } from 'react-icons/fi'
 
 import { Editor } from '../fragments/Editor'
-import { getArgPath, readFile, saveFile } from '../../services'
+import { getArgPath, getFileName, readFile, saveFile } from '../../services'
 import { isModifyTextKeyboardEvent } from '../../utils/editor'
 import { CompileError } from '../../utils/console'
 
@@ -70,16 +70,16 @@ export const Code: React.VFC<ICodeProps> = ({
         <div className="title">
           <FiFile />
           <h2 className={`font-normal ${!isSaved && 'italic'}`}>
-            examples/example.dk
+            {getFileName()}
           </h2>
         </div>
         <div className="actions">
-          <button className="icon-btn">
-            <FiPlay onClick={onSave} />
+          <button className="icon-btn" onClick={onSave}>
+            <FiPlay />
           </button>
-          {/* <button className="icon-btn">
-            <FiSettings />
-          </button> */}
+          <button className="icon-btn" onClick={handleSaveFile}>
+            <FiSave />
+          </button>
         </div>
       </div>
       <Editor value={code} errors={errors} onChange={setCode} />

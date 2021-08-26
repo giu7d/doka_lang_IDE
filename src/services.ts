@@ -8,6 +8,11 @@ import {
   transformIntoOutputLine
 } from './utils/console'
 
+export const getFileName = () => {
+  const path = remote.getGlobal('path')
+  return path
+}
+
 export const getArgPath = () => {
   const path = remote.getGlobal('path')
 
