@@ -39,3 +39,10 @@
 .editor .editor-line-number {
   @apply absolute left-0 text-gray-300 text-right w-10 font-light;
 }
+
+.console {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  @apply h-full w-full overflow-hidden bg-gray-900;
+}

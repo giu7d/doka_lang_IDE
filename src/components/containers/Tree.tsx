@@ -1,9 +1,12 @@
 import React from 'react'
 import { FiGitBranch } from 'react-icons/fi'
 import TreeGraph from 'react-d3-tree'
-import { treeSample } from '../../utils/tree'
 
-export const Tree = () => {
+interface ITreeProps {
+  data: any
+}
+
+export const Tree: React.VFC<ITreeProps> = ({ data = {} }) => {
   return (
     <div className="w-full h-full bg-gray-200 flex flex-col">
       <div className="header">
@@ -14,7 +17,7 @@ export const Tree = () => {
       </div>
       <div className="h-full w-full overflow-auto">
         <TreeGraph
-          data={treeSample}
+          data={data}
           orientation="vertical"
           pathFunc="straight"
           nodeSize={{ x: 100, y: 100 }}

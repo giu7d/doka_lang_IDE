@@ -15,11 +15,11 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
-        "prettier/prettier": [
+    "prettier/prettier": [
       "error",
       {
         "endOfLine": "auto"
-      },
+      }
     ],
     "space-before-function-paren": "off",
     "react/prop-types": "off",
