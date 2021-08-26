@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { isAbsolute, join } from 'path'
 import { remote } from 'electron'
+import childProcess from 'child_process'
 
 export const getArgPath = () => {
   const path = remote.getGlobal('path')
@@ -32,4 +33,15 @@ export const saveFile = (path: string, data: any): Promise<void> =>
       if (!err) return resolve()
       return reject(err)
     })
+  })
+
+export const runCode = (path: string): Promise<string> =>
+  new Promise((resolve, reject) => {
+    childProcess.exec(
+      `java -jar ${process.cwd()}/bundles/doka.jar -t ${path}`,
+      (err, out: string) => {
+        if (!err) return resolve(out)
+        return reject(err)
+      }
+    )
   })

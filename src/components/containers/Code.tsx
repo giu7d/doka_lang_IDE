@@ -5,13 +5,27 @@ import { Editor } from '../fragments/Editor'
 import { getArgPath, readFile, saveFile } from '../../services'
 import { isModifyTextKeyboardEvent } from '../../utils/editor'
 
-export const Code = () => {
+interface ICodeProps {
+  onChange?: (code: string) => void
+  onSave?: (code: string, path: string) => void
+  onLoad?: (code: string, path: string) => void
+}
+
+export const Code: React.VFC<ICodeProps> = ({
+  onChange = () => {},
+  onSave = () => {},
+  onLoad = () => {}
+}) => {
   const [isSaved, setIsSaved] = useState(true)
   const [code, setCode] = useState('')
 
   useEffect(() => {
     handleLoadFile()
   }, [])
+
+  useEffect(() => {
+    onChange(code)
+  }, [code])
 
   const handleKeyboardEvent = (event: React.KeyboardEvent) => {
     if (isModifyTextKeyboardEvent(event)) setIsSaved(false)
@@ -25,6 +39,7 @@ export const Code = () => {
       const fileAsBuffer = await readFile(path)
       const fileAsString = fileAsBuffer.toString('utf-8')
       setCode(fileAsString)
+      onLoad(code, path)
       console.log(path, 'successfully loaded!')
     } catch (error) {
       console.warn(error)
@@ -37,7 +52,7 @@ export const Code = () => {
       const path = getArgPath()
       await saveFile(path, code)
       setIsSaved(true)
-      console.log(path, 'successfully saved!')
+      onSave(code, path)
     } catch (error) {
       console.warn(error)
     }
