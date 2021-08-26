@@ -6,13 +6,26 @@ import { highlightWithLineNumbers } from '../../utils/editor'
 import 'prismjs/components/prism-ruby'
 import 'prismjs/components/prism-crystal'
 import 'prismjs/themes/prism.css'
+import { CompileError } from '../../utils/console'
 
 interface IEditorProps {
   value: string
+  errors?: CompileError[]
   onChange: (value: string) => void
 }
 
-export const Editor: React.VFC<IEditorProps> = ({ value, onChange }) => {
+export const Editor: React.VFC<IEditorProps> = ({
+  value,
+  errors = [],
+  onChange
+}) => {
+  const adaptErrosToRows = (err: CompileError[]): number[] => {
+    const items = err.map(el => el.row)
+    const filteredItems = items.filter(el => !!el) as number[]
+
+    return filteredItems
+  }
+
   return (
     <div className="w-full h-full overflow-auto">
       <div className="w-6"></div>
@@ -24,7 +37,12 @@ export const Editor: React.VFC<IEditorProps> = ({ value, onChange }) => {
         value={value}
         onValueChange={onChange}
         highlight={value =>
-          highlightWithLineNumbers(value, languages.crystal, 'crystal')
+          highlightWithLineNumbers(
+            value,
+            languages.crystal,
+            'crystal',
+            adaptErrosToRows(errors)
+          )
         }
       />
     </div>

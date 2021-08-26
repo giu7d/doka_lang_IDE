@@ -4,14 +4,17 @@ import { FiFile, FiPlay, FiSettings } from 'react-icons/fi'
 import { Editor } from '../fragments/Editor'
 import { getArgPath, readFile, saveFile } from '../../services'
 import { isModifyTextKeyboardEvent } from '../../utils/editor'
+import { CompileError } from '../../utils/console'
 
 interface ICodeProps {
+  errors?: CompileError[]
   onChange?: (code: string) => void
   onSave?: (code: string, path: string) => void
   onLoad?: (code: string, path: string) => void
 }
 
 export const Code: React.VFC<ICodeProps> = ({
+  errors = [],
   onChange = () => {},
   onSave = () => {},
   onLoad = () => {}
@@ -79,7 +82,7 @@ export const Code: React.VFC<ICodeProps> = ({
           </button>
         </div>
       </div>
-      <Editor value={code} onChange={setCode} />
+      <Editor value={code} errors={errors} onChange={setCode} />
     </div>
   )
 }

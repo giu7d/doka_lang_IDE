@@ -5,19 +5,29 @@ import { Tree } from './components/containers/Tree'
 import { Code } from './components/containers/Code'
 import { Console } from './components/containers/Console'
 import { Template } from './components/Template'
-import { runCode } from './services'
-import { parseOutputToTree } from './utils/tree'
+import { compile } from './services'
+import { parseStringToTree } from './utils/tree'
+import { CompileError, OutputLine } from './utils/console'
 
 export const App = () => {
-  const [output, setOutput] = useState('')
+  const [output, setOutput] = useState<OutputLine[]>([])
+  const [errors, setErrors] = useState<CompileError[]>([])
   const [tree, setTree] = useState({})
+
+  // eslint-disable-next-line no-unused-vars
+  const clear = () => {
+    setOutput([])
+    setErrors([])
+    setTree([])
+  }
 
   const run = async (_code: string, path: string) => {
     try {
-      const out = await runCode(path)
-      setOutput(out)
-      const compileTree = parseOutputToTree(out)
-      setTree(compileTree)
+      const response = await compile(path)
+
+      setErrors(response.errors)
+      setTree(parseStringToTree(response.tree))
+      setOutput(response.output)
     } catch (error) {
       console.warn(error)
     }
@@ -26,7 +36,7 @@ export const App = () => {
   return (
     <Template>
       <Tree data={tree} />
-      <Code onSave={run} />
+      <Code errors={errors} onSave={run} />
       <Console output={output} />
     </Template>
   )

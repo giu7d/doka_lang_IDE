@@ -15,9 +15,6 @@ type ListTreeNode = {
 
 const _listLastItem = (list: any[]) => list[list.length - 1]
 
-const _findParseTreeSection = (value: string) =>
-  value.split('>').find(e => e.match('Parse tree'))
-
 const _listTreeEntries = (value: string) => value.match(/\t\|\t(\s)*.*/g)
 
 const _convertToDepthList = (list: string[]) =>
@@ -62,7 +59,7 @@ const _convertDepthListToRelationshipList = (list: DepthListItem[]) => {
         el => el.depth === item.depth - 1
       )
 
-      if (!matchDepth.length) return console.log('Not found!')
+      if (!matchDepth.length) return console.warn('Not found!')
 
       const parent = _listLastItem(matchDepth)
 
@@ -77,22 +74,14 @@ const _convertDepthListToRelationshipList = (list: DepthListItem[]) => {
   return relationshipList
 }
 
-export const parseOutputToTree = (out: string) => {
-  const parseTree = _findParseTreeSection(out)
+export const parseStringToTree = (value: string) => {
+  const treeEntries = _listTreeEntries(value)
 
-  if (!parseTree) return
-
-  const treeEntries = _listTreeEntries(parseTree)
-
-  if (!treeEntries) return
+  if (!treeEntries) return {}
 
   const orderedDepthList = _convertToDepthList(treeEntries)
 
   const relationshipList = _convertDepthListToRelationshipList(orderedDepthList)
-
-  console.log(orderedDepthList)
-
-  console.log(relationshipList)
 
   const [tree = {}] = new JsTreeList.ListToTree(relationshipList, {
     key_id: 'id',

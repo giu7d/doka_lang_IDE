@@ -2,6 +2,11 @@ import fs from 'fs'
 import { isAbsolute, join } from 'path'
 import { remote } from 'electron'
 import childProcess from 'child_process'
+import {
+  getErrors,
+  separateOutputFromTreeSection,
+  transformIntoOutputLine
+} from './utils/console'
 
 export const getArgPath = () => {
   const path = remote.getGlobal('path')
@@ -45,3 +50,26 @@ export const runCode = (path: string): Promise<string> =>
       }
     )
   })
+
+export const compile = async (path: string) => {
+  const rawOutput = await runCode(path)
+
+  const [consoleSection, tree] = separateOutputFromTreeSection(rawOutput)
+
+  const output = transformIntoOutputLine(consoleSection)
+  const errors = getErrors(output)
+
+  if (!errors.length) {
+    output.push({
+      className: 'success',
+      children: 'SUCCESSFULLY COMPILED'
+    })
+  } else {
+    output.push({
+      className: 'error',
+      children: 'FAIL TO COMPILE'
+    })
+  }
+
+  return { output, tree, errors }
+}

@@ -46,3 +46,15 @@
   grid-template-rows: auto 1fr;
   @apply h-full w-full overflow-hidden bg-gray-900;
 }
+
+.success {
+  @apply text-green-400 py-4;
+}
+
+.error {
+  @apply text-red-400 py-4;
+}
+
+.error-line {
+  @apply text-red-400 bg-red-600 bg-opacity-10 !important;
+}

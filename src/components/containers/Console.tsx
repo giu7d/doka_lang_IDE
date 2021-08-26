@@ -1,7 +1,12 @@
 import React from 'react'
 import { FiTerminal, FiTrash } from 'react-icons/fi'
+import { OutputLine } from '../../utils/console'
 
-export const Console = ({ output = '' }) => {
+interface IConsoleProps {
+  output?: OutputLine[]
+}
+
+export const Console: React.VFC<IConsoleProps> = ({ output = [] }) => {
   return (
     <div className="console">
       <div className="header text-white">
@@ -17,12 +22,12 @@ export const Console = ({ output = '' }) => {
       </div>
       <div className="flex flex-col flex-shrink flex-grow overflow-auto">
         <div className="px-8 w-auto h-full font-mono text-white text-xs">
-          {output.split(/\n/g).map((el, key) => (
+          {output.map((el, key) => (
             <span
-              className="block w-full break-words"
+              className={`block w-full break-words ${el.className}`}
               key={`console-line-${key}`}
             >
-              {el}
+              {el.children}
             </span>
           ))}
           <div className="h-1/3"></div>
